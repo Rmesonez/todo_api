@@ -68,37 +68,6 @@ const signup = async (req, res) => {
     }
 }
 
-// const forgotPassword = async (req, res) => {
-//     try {
-//         const user = await Users.findOne({
-//             where: {
-//                 email: req.body.email
-//             }
-//         });
-//         if (user) {
-//             const token = jwt.sign({
-//                 user: user
-//             }, process.env.SECRET_KEY, {
-//                 expiresIn: process.env.EXPIRES_IN
-//             });
-//             res.json({
-//                 user: user,
-//                 token: token
-//             });
-//         } else {
-//             res.status(401).json({
-//                 message: 'Invalid email'
-//             });
-//         }
-//     } catch (error) {
-//         res.status(400).json({
-//             message: 'Invalid data',
-//             error
-//         });
-//         console.log(error);
-//     }
-// }
-
 module.exports = {
     login,
     signup

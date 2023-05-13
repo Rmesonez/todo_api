@@ -9,7 +9,7 @@ const getAllUsers = async (req, res) => {
             attributes: ['id','username', 'email'],
             include: [{
                 model: Task,
-                attributes: ['id','title', 'description', 'completed',],
+                attributes: ['id','title', 'description', 'completed'],
                 include: [{
                     model: Categories,
                     attributes: ['category']
@@ -77,7 +77,7 @@ const getOneUser = async (req, res) => {
             attributes: ['id', 'username', 'email'],
             include: [{
                 model: Task,
-                attributes: ['id','title', 'description', 'completed',],
+                attributes: ['id','title', 'description', 'completed'],
                 include: [{
                     model: Categories,
                     attributes: ['category']
