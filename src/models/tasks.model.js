@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const db = require('../database/database');
-const Subcategories = require('./subcategories.model');
 
 
 
