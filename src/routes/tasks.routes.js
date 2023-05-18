@@ -6,15 +6,20 @@ const {
     createTask,
     updateTask,
     deleteTask,
-    getOneTask
+    getOneTask,
+    getAllTasksComplete
 } = require('../controllers/tasks.controller');
+const auth = require('../middelwares/auth.middelware');
 
 
 //get all tasks
 router.get('/tasks', getAllTasks);
 
+//get all tasks with users, categories and subcategories
+router.get('/tasks/info', getAllTasksComplete);
+
 //create a new user
-router.post('/tasks', createTask);
+router.post('/tasks', auth, createTask);
 
 //get a user by id
 router.get('/tasks/:id', getOneTask);

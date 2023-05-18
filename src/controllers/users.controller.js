@@ -6,19 +6,7 @@ const Subcategories = require('../models/subcategories.model');
 const getAllUsers = async (req, res) => {
     try {
         const getUsers = await Users.findAll({
-            attributes: ['id','username', 'email'],
-            include: [{
-                model: Task,
-                attributes: ['id','title', 'description', 'completed'],
-                include: [{
-                    model: Categories,
-                    attributes: ['category']
-                },
-                {
-                    model: Subcategories,
-                    attributes: ['subcategory']
-                }]
-            }]
+            attributes: ['id','username', 'email']
         });
         res.status(200).json(getUsers);
     } catch (error) {
@@ -28,17 +16,17 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-const createUser = async (req, res) => {
-    const { username, email, password } = req.body;
-    try {
-        const newUser = await Users.create({ username, email, password });
-        res.status(201).json(newUser);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Something went wrong cannot create a User',
-        });
-    }
-};
+// const createUser = async (req, res) => {
+//     const { username, email, password } = req.body;
+//     try {
+//         const newUser = await Users.create({ username, email, password });
+//         res.status(201).json(newUser);
+//     } catch (error) {
+//         return res.status(500).json({
+//             message: 'Something went wrong cannot create a User',
+//         });
+//     }
+// };
 
 const updateUser = async (req, res) => {
     const { username } = req.body;
@@ -47,9 +35,7 @@ const updateUser = async (req, res) => {
             { username },
             { where: { id: req.params.id }
         });
-        // updateUser.set({ username });
-        // await updateUser.save();
-        res.status(202).json(updateUser);
+        res.status(202).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot update a User',
@@ -60,9 +46,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         await Users.destroy({ where: { id: req.params.id } });
-        res.status(204).json({
-            message: 'User deleted successfully',
-        });
+        res.status(204).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot delete a user',
@@ -101,12 +85,38 @@ const getOneUser = async (req, res) => {
     }
 };
 
+const getAllUsersTasks = async (req, res) => {
+    try {
+        const getUsers = await Users.findAll({
+            attributes: ['id','username', 'email'],
+            include: [{
+                model: Task,
+                attributes: ['id','title', 'description', 'completed'],
+                include: [{
+                    model: Categories,
+                    attributes: ['category']
+                },
+                {
+                    model: Subcategories,
+                    attributes: ['subcategory']
+                }]
+            }]
+        });
+        res.status(200).json(getUsers);
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Something went wrong cannot get the Users',
+        });
+    }
+};
+
 
 
 module.exports = {
     getAllUsers,
-    createUser,
+    //createUser,
     updateUser,
     deleteUser,
     getOneUser,
+    getAllUsersTasks
 };

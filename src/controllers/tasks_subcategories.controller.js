@@ -16,7 +16,7 @@ const createTaskSubCategory = async (req, res) => {
     const { taskId, subcategoryId } = req.body;
     try {
         const newTaskSubCategory = await TasksSubCategories.create({ taskId, subcategoryId });
-        res.json(newTaskSubCategory);
+        res.status(201).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot create a task and subcategory',
@@ -31,9 +31,7 @@ const updateTaskSubCategory = async (req, res) => {
             { taskId, subcategoryId },
             { where: { id: req.params.id }
         });
-        updateTaskSubCategory.set({ taskId, subcategoryId });
-        await updateTaskSubCategory.save();
-        res.json(updateTaskSubCategory);
+        res.status(202).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot update a task and subcategory',
@@ -44,9 +42,7 @@ const updateTaskSubCategory = async (req, res) => {
 const deleteTaskSubCategory = async (req, res) => {
     try {
         await TasksSubCategories.destroy({ where: { id: req.params.id } });
-        res.status(204).json({
-            message: 'Task and subcategory deleted successfully',
-        });
+        res.status(204).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot delete a task and subcategory',

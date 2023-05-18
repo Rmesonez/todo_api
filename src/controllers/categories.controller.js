@@ -6,20 +6,7 @@ const Users = require('../models/users.model');
 //get all categories
 const getAllCategories = async (req, res) => {
     try {
-        const getCategories = await Categories.findAll({
-            include: [{
-                model: Task,
-                attributes: { exclude: ['createdAt', 'updatedAt']},
-                include: [{
-                    model: Users,
-                    attributes: ['id','username', 'email'],
-                },
-                {
-                    model: Subcategories,
-                    attributes: ['subcategory']
-                }]
-            }]
-        });
+        const getCategories = await Categories.findAll();
         res.json(getCategories);
     } catch (error) {
         return res.status(500).json({
@@ -33,7 +20,7 @@ const createCategory = async (req, res) => {
     const { category } = req.body;
     try {
         const newCategory = await Categories.create({ category });
-        res.json(newCategory);
+        res.status(201).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot create a category',
@@ -75,9 +62,7 @@ const updateCategory = async (req, res) => {
             { category },
             { where: { id: req.params.id }
         });
-        updateCategory.set({ category });
-        await updateCategory.save();
-        res.json(updateCategory);
+        res.status(202).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot update a category',
@@ -90,12 +75,34 @@ const deleteCategory = async (req, res) => {
     // console.log(req.params.id)
     try {
         await Categories.destroy({ where: { id: req.params.id } });
-        res.status(204).json({
-            message: 'Category deleted successfully',
-        });
+        res.status(204).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot delete a category',
+        });
+    }
+}
+
+const getAllCategoriesTasks = async (req, res) => {
+    try {
+        const getCategories = await Categories.findAll({
+            include: [{
+                model: Task,
+                attributes: { exclude: ['createdAt', 'updatedAt']},
+                include: [{
+                    model: Users,
+                    attributes: ['id','username', 'email'],
+                },
+                {
+                    model: Subcategories,
+                    attributes: ['subcategory']
+                }]
+            }]
+        });
+        res.json(getCategories);
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Something went wrong cannot get categories',
         });
     }
 }
@@ -105,5 +112,6 @@ module.exports = {
     createCategory,
     updateCategory,
     deleteCategory,
-    getOneCategory
+    getOneCategory,
+    getAllCategoriesTasks
 }

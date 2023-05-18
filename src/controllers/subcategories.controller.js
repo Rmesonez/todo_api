@@ -6,21 +6,7 @@ const Users = require('../models/users.model');
 //get all subcategories
 const getAllSubCategories = async (req, res) => {
     try {
-        const getSubCategories = await subCategories.findAll({
-            attributes: ['subcategory'],
-            include: [{
-                model: Task,
-                attributes: ['id','title', 'description', 'completed' ],
-                include: [{
-                    model: Category,
-                    attributes: ['category']
-                },
-                {
-                    model: Users,
-                    attributes: ['id','username', 'email'],
-                }] 
-            }]
-        });
+        const getSubCategories = await subCategories.findAll();
         res.json(getSubCategories);
     } catch (error) {
         return res.status(500).json({
@@ -34,7 +20,7 @@ const createSubCategory = async (req, res) => {
     const { subcategory } = req.body;
     try {
         const newSubCategory = await subCategories.create({ subcategory });
-        res.json(newSubCategory);
+        res.status(201).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot create a subcategory',
@@ -75,9 +61,7 @@ const updateSubCategory = async (req, res) => {
             { subcategory },
             { where: { id: req.params.id }
         });
-        updateSubCategory.set({ subcategory });
-        await updateSubCategory.save();
-        res.json(updateSubCategory);
+        res.status(202).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot update a subcategory',
@@ -89,10 +73,35 @@ const updateSubCategory = async (req, res) => {
 const deleteSubCategory = async (req, res) => {
     try {
         const deleteSubCategory = await subCategories.destroy({ where: { id: req.params.id } });
-        res.json(deleteSubCategory);
+        res.status(204).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot delete a subcategory',
+        });
+    }
+}
+
+const getAllSubCategoriesTasks = async (req, res) => {
+    try {
+        const getSubCategories = await subCategories.findAll({
+            attributes: ['subcategory'],
+            include: [{
+                model: Task,
+                attributes: ['id','title', 'description', 'completed' ],
+                include: [{
+                    model: Category,
+                    attributes: ['category']
+                },
+                {
+                    model: Users,
+                    attributes: ['id','username', 'email'],
+                }] 
+            }]
+        });
+        res.json(getSubCategories);
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Something went wrong cannot get subcategories',
         });
     }
 }
@@ -102,5 +111,6 @@ module.exports = {
     createSubCategory,
     getOneSubCategory,
     updateSubCategory,
-    deleteSubCategory
+    deleteSubCategory,
+    getAllSubCategoriesTasks
 }

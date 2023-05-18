@@ -6,11 +6,15 @@ const {
     createSubCategory,
     getOneSubCategory,
     updateSubCategory,
-    deleteSubCategory
+    deleteSubCategory,
+    getAllSubCategoriesTasks
 } = require('../controllers/subcategories.controller');
 
 //get all subcategories
 router.get('/subcategories', getAllSubCategories);
+
+//get all subcategories with tasks
+router.get('/subcategories/tasks', getAllSubCategoriesTasks);
 
 //create a new subcategory
 router.post('/subcategories', createSubCategory);

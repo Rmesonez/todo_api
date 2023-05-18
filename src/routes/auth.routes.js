@@ -5,6 +5,7 @@ const {
     signup
 } = require('../controllers/auth.controller');
 
+
 //login
 router.post('/api/login', login);
 

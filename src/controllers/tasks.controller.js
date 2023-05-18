@@ -7,18 +7,6 @@ const getAllTasks = async (req, res) => {
     try {
         const getTasks = await Task.findAll({
             attributes: [ 'id', 'title', 'description', 'completed'],
-            include: [ {
-                model: User,
-                attributes: ['id', 'username', 'email'],
-            },
-            {
-                model: Categories,
-                attributes: ['category']
-            },
-            {
-                model: Subcategories,
-                attributes: ['subcategory']
-            }]    
         });
         res.json(getTasks);
     } catch (error) {
@@ -32,7 +20,7 @@ const createTask = async (req, res) => {
     const { title, description, completed, user_id, category_id } = req.body;
     try {
         const newTask = await Task.create({ title, description, completed, user_id, category_id });
-        res.json(newTask);
+        res.status(201).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot create a task',
@@ -47,9 +35,7 @@ const updateTask = async (req, res) => {
             { title, description, completed, user_id, category_id, createdAT, updatedAT },
             { where: { id: req.params.id }
         });
-        // updateTask.set({ title, description, completed, user_id, category_id, createdAT, updatedAT });
-        // await updateTask.save();
-        res.json(updateTask);
+        res.status(202).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot update a task',
@@ -60,9 +46,7 @@ const updateTask = async (req, res) => {
 const deleteTask = async (req, res) => {
     try {
         await Task.destroy({ where: { id: req.params.id } });
-        res.status(204).json({
-            message: 'Task deleted successfully',
-        });
+        res.status(204).send();
     } catch (error) {
         return res.status(500).json({
             message: 'Something went wrong cannot delete a task',
@@ -101,11 +85,37 @@ const getOneTask = async (req, res) => {
     }
 };
 
+const getAllTasksComplete = async (req, res) => {
+    try {
+        const getTasks = await Task.findAll({
+            attributes: [ 'id', 'title', 'description', 'completed'],
+            include: [ {
+                model: User,
+                attributes: ['id', 'username', 'email'],
+            },
+            {
+                model: Categories,
+                attributes: ['category']
+            },
+            {
+                model: Subcategories,
+                attributes: ['subcategory']
+            }]    
+        });
+        res.json(getTasks);
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Something went wrong cannot get tasks',
+        });
+    }
+};
+
 
 module.exports = {
     getAllTasks,
     createTask,
     updateTask,
     deleteTask,
-    getOneTask
+    getOneTask,
+    getAllTasksComplete
 };

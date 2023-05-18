@@ -6,11 +6,15 @@ const {
     createCategory,
     updateCategory,
     deleteCategory,
-    getOneCategory
+    getOneCategory,
+    getAllCategoriesTasks
 } = require('../controllers/categories.controller');
 
 //get all categories
 router.get('/categories', getAllCategories);
+
+//get all categories with tasks
+router.get('/categories/tasks', getAllCategoriesTasks);
 
 //create a new category
 router.post('/categories', createCategory);
